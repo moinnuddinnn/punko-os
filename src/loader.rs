@@ -139,6 +139,15 @@ pub fn load_kernel(image_handle: uefi::Handle) {
         uefi::println!("Segment loaded into memory.");
 
 
+        if program_header.p_memsz > program_header.p_filesz {
+            unsafe {
+                core::ptr::write_bytes(memory.as_ptr().add(program_header.p_filesz as usize), 0, (program_header.p_memsz - program_header.p_filesz) as usize);
+            }
+        }
+
+        uefi::println!("Zerped {} extra bytes.", program_header.p_memsz - program_header.p_filesz);
+
+
         uefi::println!("  Type: {}", program_header.p_type);
         uefi::println!("  Offset: {:#x}", program_header.p_offset);
         uefi::println!("  Virtual Address: {:#x}", program_header.p_vaddr);
