@@ -131,6 +131,13 @@ pub fn load_kernel(image_handle: uefi::Handle) {
         
         uefi::println!("Segment allocated at: {:p}", memory.as_ptr());
 
+        unsafe {
+            core::ptr::copy_nonoverlapping(kernel_data.as_ptr().add(program_header.p_offset as usize), memory.as_ptr(), program_header.p_filesz as usize);
+
+        }
+
+        uefi::println!("Segment loaded into memory.");
+
 
         uefi::println!("  Type: {}", program_header.p_type);
         uefi::println!("  Offset: {:#x}", program_header.p_offset);
