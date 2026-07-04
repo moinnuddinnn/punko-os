@@ -12,6 +12,10 @@ use crate::elf::{
     //Elf64Header,
     Elf64ProgramHeader,
 };
+use uefi::boot::{
+    AllocateType,
+    MemoryType,
+};
 
 
 pub fn load_kernel(image_handle: uefi::Handle) {
