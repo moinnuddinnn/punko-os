@@ -12,6 +12,7 @@ use crate::elf::{
     //Elf64Header,
     Elf64ProgramHeader,
 };
+
 use uefi::boot::{
     AllocateType,
     MemoryType,
@@ -116,6 +117,21 @@ pub fn load_kernel(image_handle: uefi::Handle) {
         }
 
         uefi::println!("PT_LOAD segment found.");
+
+        let pages = (program_header.p_memsz as usize + 4095) / 4096;
+
+        uefi::println!("Allocating {} pages for segment...", pages);
+
+        let memory = boot::allocate_pages(
+            AllocateType::AnyPages,
+            MemoryType::LOADER_DATA,
+            pages,
+        )
+        .expect("Failed to allocate memory for segment");
+        
+        uefi::println!("Segment allocated at: {:p}", memory.as_ptr());
+
+
         uefi::println!("  Type: {}", program_header.p_type);
         uefi::println!("  Offset: {:#x}", program_header.p_offset);
         uefi::println!("  Virtual Address: {:#x}", program_header.p_vaddr);
