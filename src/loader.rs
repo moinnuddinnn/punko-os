@@ -63,7 +63,7 @@ pub fn load_kernel(image_handle: uefi::Handle) {
 
     uefi::println!("Kernel size: {} bytes", kernel_size);
 
-    // Allocate a buffer large enough to hold the kernel.
+    // Allocate a buffer large enough to hold the kernel
     uefi::println!("Allocating kernel buffer...");
 
     let mut kernel_data = vec![0u8; kernel_size];
